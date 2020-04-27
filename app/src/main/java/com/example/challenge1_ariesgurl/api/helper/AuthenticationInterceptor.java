@@ -1,0 +1,26 @@
+package com.example.challenge1_ariesgurl.api.helper;
+
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class AuthenticationInterceptor implements Interceptor {
+    private String apikey;
+
+    public AuthenticationInterceptor(String apikey) {
+        this.apikey = apikey;
+    }
+
+    @Override
+    public Response intercept(Chain chain) throws IOException {
+        Request original = chain.request();
+        Request.Builder builder = original.newBuilder()
+                .header("Authorization", apikey)
+                .method(original.method(), original.body());
+        Request request = builder.build();
+        return chain.proceed(request);
+    }
+
+}
